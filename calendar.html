@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Calendar</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    :root {
+      --bg-color: #f0f8ff;
+      --text-color: #333333;
+      --container-bg: #ffffff;
+      --header-bg: #4285f4;
+      --header-text: #ffffff;
+      --event-bg: #e6f2ff;
+      --event-text: #4285f4;
+      --modal-bg: #ffffff;
+      --modal-text: #333333;
+      --button-bg: #4285f4;
+      --button-text: #ffffff;
+    }
+
+    .dark-theme {
+      --bg-color: #1a1a1a;
+      --text-color: #f0f0f0;
+      --container-bg: #2c2c2c;
+      --header-bg: #3367d6;
+      --header-text: #ffffff;
+      --event-bg: #3d3d3d;
+      --event-text: #4285f4;
+      --modal-bg: #2c2c2c;
+      --modal-text: #f0f0f0;
+      --button-bg: #3367d6;
+      --button-text: #ffffff;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .calendar-container {
+      background-color: var(--container-bg);
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 800px;
+      overflow: hidden;
+      transition: background-color 0.3s;
+    }
+
+    .calendar-header {
+      background-color: var(--header-bg);
+      color: var(--header-text);
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .calendar-header h1 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 400;
+    }
+
+    .calendar-nav {
+      display: flex;
+      align-items: center;
+    }
+
+    .calendar-nav button {
+      background: none;
+      border: none;
+      color: var(--header-text);
+      font-size: 24px;
+      cursor: pointer;
+      padding: 0 10px;
+    }
+
+    #monthYear {
+      font-size: 18px;
+      margin: 0 15px;
+    }
+
+    .calendar-body {
+      padding: 20px;
+    }
+
+    .calendar-days, .calendar-dates {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 5px;
+    }
+
+    .calendar-days div {
+      text-align: center;
+      font-weight: 500;
+      color: var(--event-text);
+      padding: 10px 0;
+    }
+
+    .calendar-dates div {
+      text-align: center;
+      padding: 10px 0;
+      cursor: pointer;
+      border-radius: 50%;
+      transition: background-color 0.3s;
+    }
+
+    .calendar-dates div:hover {
+      background-color: var(--event-bg);
+    }
+
+    .calendar-dates div.event {
+      background-color: var(--event-bg);
+      color: var(--event-text);
+      font-weight: 500;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background-color: var(--modal-bg);
+      padding: 30px;
+      border-radius: 8px;
+      width: 300px;
+    }
+
+    .modal h2 {
+      margin-top: 0;
+      color: var(--event-text);
+    }
+
+    .modal input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #e0e0e0;
+      border-radius: 4px;
+      font-size: 16px;
+      background-color: var(--modal-bg);
+      color: var(--modal-text);
+    }
+
+    .modal button {
+      background-color: var(--button-bg);
+      color: var(--button-text);
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .modal .close {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      font-size: 24px;
+      cursor: pointer;
+      color: #9e9e9e;
+    }
+
+    .task-indicator {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      background-color: var(--event-text);
+      border-radius: 50%;
+      margin-left: 2px;
+      vertical-align: middle;
+    }
+
+    .theme-toggle {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: none;
+      border: none;
+      color: var(--text-color);
+      font-size: 24px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <button class="theme-toggle" onclick="toggleTheme()"><i class="fas fa-moon"></i></button>
+  <div class="calendar-container">
+    <div class="calendar-header">
+      <h1>My Calendar</h1>
+      <div class="calendar-nav">
+        <button onclick="prevMonth()">&#9664;</button>
+        <span id="monthYear"></span>
+        <button onclick="nextMonth()">&#9654;</button>
+      </div>
+    </div>
+    <div class="calendar-body">
+      <div class="calendar-days">
+        <div>Sun</div>
+        <div>Mon</div>
+        <div>Tue</div>
+        <div>Wed</div>
+        <div>Thu</div>
+        <div>Fri</div>
+        <div>Sat</div>
+      </div>
+      <div class="calendar-dates" id="calendarDates"></div>
+    </div>
+  </div>
+
+  <div id="eventModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <h2>Add Event</h2>
+      <input type="text" id="eventName" placeholder="Event Name">
+      <button onclick="addEvent()">Add Event</button>
+    </div>
+  </div>
+
+  <script>
+    let currentMonth = new Date().getMonth();
+    let currentYear = new Date().getFullYear();
+    const tasks = {};
+
+    const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    const monthYear = document.getElementById("monthYear");
+    const calendarDates = document.getElementById("calendarDates");
+
+    function generateCalendar() {
+      calendarDates.innerHTML = "";
+      const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+      const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+      for (let i = 0; i < firstDay; i++) {
+        const emptyCell = document.createElement("div");
+        calendarDates.appendChild(emptyCell);
+      }
+
+      for (let date = 1; date <= daysInMonth; date++) {
+        const dateCell = document.createElement("div");
+        const dateKey = `${currentYear}-${currentMonth + 1}-${date}`;
+        dateCell.innerText = date;
+
+        if (tasks[dateKey]) {
+          dateCell.classList.add("event");
+          const taskIndicator = document.createElement("span");
+          taskIndicator.classList.add("task-indicator");
+          dateCell.appendChild(taskIndicator);
+          dateCell.addEventListener("click", () => showTasks(dateKey));
+        } else {
+          dateCell.addEventListener("click", () => openModal(dateKey));
+        }
+
+        calendarDates.appendChild(dateCell);
+      }
+
+      monthYear.innerText = `${monthNames[currentMonth]} ${currentYear}`;
+    }
+
+    function prevMonth() {
+      currentMonth--;
+      if (currentMonth < 0) {
+        currentMonth = 11;
+        currentYear--;
+      }
+      generateCalendar();
+    }
+
+    function nextMonth() {
+      currentMonth++;
+      if (currentMonth > 11) {
+        currentMonth = 0;
+        currentYear++;
+      }
+      generateCalendar();
+    }
+
+    function openModal(dateKey) {
+      const modal = document.getElementById("eventModal");
+      modal.style.display = "flex";
+      modal.setAttribute("data-date", dateKey);
+    }
+
+    function closeModal() {
+      document.getElementById("eventModal").style.display = "none";
+      document.getElementById("eventName").value = "";
+    }
+
+    function addEvent() {
+      const modal = document.getElementById("eventModal");
+      const dateKey = modal.getAttribute("data-date");
+      const eventName = document.getElementById("eventName").value;
+
+      if (eventName) {
+        if (!tasks[dateKey]) {
+          tasks[dateKey] = [];
+        }
+        tasks[dateKey].push(eventName);
+        closeModal();
+        generateCalendar();
+      }
+    }
+
+    function showTasks(dateKey) {
+      const taskList = tasks[dateKey] || [];
+      const taskListHTML = taskList.map(task => `<li>${task}</li>`).join('');
+      
+      alert(`Tasks for ${dateKey}:\n\n${taskListHTML}`);
+    }
+
+    function toggleTheme() {
+      document.body.classList.toggle('dark-theme');
+      const themeIcon = document.querySelector('.theme-toggle i');
+      themeIcon.classList.toggle('fa-moon');
+      themeIcon.classList.toggle('fa-sun');
+    }
+
+    generateCalendar();
+  </script>
+</body>
+</html>

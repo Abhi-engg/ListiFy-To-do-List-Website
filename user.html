@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ListiFy - To-Do List Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="user.css">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2980b9;
+            --accent-color: #1abc9c;
+            --text-color: #333333;
+            --bg-color: #f0f8ff;
+            --card-bg: #ffffff;
+            --sidebar-width: 250px;
+        }
+
+        .dark-theme {
+            --primary-color: #2980b9;
+            --secondary-color: #3498db;
+            --accent-color: #16a085;
+            --text-color: #e0e0e0;
+            --bg-color: #1e1e1e;
+            --card-bg: #2c2c2c;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+        
+        .container {
+            display: flex;
+        }
+        
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: var(--primary-color);
+            color: #fff;
+            height: 100vh;
+            padding: 2rem;
+            position: fixed;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar h2 {
+            margin-bottom: 2rem;
+        }
+        
+        .sidebar ul {
+            list-style: none;
+        }
+        
+        .sidebar ul li {
+            margin-bottom: 1rem;
+        }
+        
+        .sidebar ul li a {
+            color: #fff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            padding: 0.5rem;
+            border-radius: 5px;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        
+        .sidebar ul li a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+        }
+        
+        .sidebar ul li a i {
+            margin-right: 10px;
+        }
+        
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            margin-left: var(--sidebar-width);
+            transition: all 0.3s ease;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2rem;
+            background-color: var(--card-bg);
+            padding: 1rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .user-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: var(--accent-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            color: #fff;
+            margin-right: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .dashboard-item {
+            background-color: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .dashboard-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .dashboard-item h3 {
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--secondary-color);
+            color: #fff;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background-color: #2471a3;
+            transform: scale(1.05);
+        }
+        
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+        
+        .metric-item {
+            background-color: var(--primary-color);
+            color: #fff;
+            padding: 1rem;
+            border-radius: 10px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .metric-item:hover {
+            transform: scale(1.05);
+        }
+        
+        .metric-item h4 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .activity-list {
+            list-style: none;
+        }
+        
+        .activity-list li {
+            margin-bottom: 0.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #e0e0e0;
+            transition: all 0.3s ease;
+        }
+        
+        .activity-list li:hover {
+            transform: translateX(5px);
+        }
+        
+        .activity-list li:last-child {
+            border-bottom: none;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: static;
+            }
+            
+            .main-content {
+                margin-left: 0;
+                padding: 1rem;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translate3d(0, 40px, 0);
+            }
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
+        }
+
+        .fadeInUp {
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--primary-color);
+            color: #fff;
+            border: none;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            background-color: var(--secondary-color);
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" onclick="toggleTheme()">
+        <i class="fas fa-moon"></i>
+    </button>
+    <div class="container">
+        <aside class="sidebar animate__animated animate__slideInLeft">
+            <h2>ListiFy</h2>
+            <nav>
+                <ul>
+                    <li><a href="#dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="task.html"><i class="fas fa-tasks"></i> Tasks</a></li>
+                    <li><a href="timetable.html"><i class="fas fa-table"></i> Timetable</a></li>
+                    <li><a href="goal.html"><i class="fas fa-futbol"></i>Goal.Kepper</Goal></a></li>
+                    <li><a href="calendar.html"><i class="fas fa-calendar-alt"></i> My Calendar</a></li>
+                    <li><a href="stick.html"><i class="fas fa-sticky-note"></i>Sticky Notes</a></li>
+                    <li><a href="#logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                </ul>
+            </nav>
+        </aside>
+        
+        <main class="main-content">
+            <section class="user-info animate__animated animate__fadeIn">
+                <div class="user-avatar">AY</div>
+                <div>
+                    <h2>Welcome, Abhijeet yadav</h2>
+                    <p>Task Master</p>
+                </div>
+            </section>
+            
+            <section class="dashboard-grid">
+                <div class="dashboard-item fadeInUp">
+                    <h3>Goal.Keeper</h3>
+                    <iframe src="goal.html" width="100%" height="400" frameborder="0"></iframe>
+                </div>
+                <div class="dashboard-item fadeInUp" style="animation-delay: 0.2s;">
+                    <h3>Timetable</h3>
+                    <iframe src="timetable.html" width="100%" height="400" frameborder="0"></iframe>
+                </div>
+                <div class="dashboard-item fadeInUp" style="animation-delay: 1s;">
+                    <h3>StickyNotes</h3>
+                    <iframe src="stick.html" width="100%" height="400" frameborder="0"></iframe>
+                </div>
+                <div class="dashboard-item fadeInUp" style="animation-delay: 0.4s;">
+                    <h3>Key Metrics</h3>
+                    <div class="metric-grid">
+                        <div class="metric-item animate__animated animate__zoomIn" style="animation-delay: 0.6s;">
+                            <h4>15</h4>
+                            <p>Tasks Completed</p>
+                        </div>
+                        <div class="metric-item animate__animated animate__zoomIn" style="animation-delay: 0.8s;">
+                            <h4>8</h4>
+                            <p>Tasks Pending</p>
+                        </div>
+                        <div class="metric-item animate__animated animate__zoomIn" style="animation-delay: 1s;">
+                            <h4>85%</h4>
+                            <p>Productivity</p>
+                        </div>
+                        <div class="metric-item animate__animated animate__zoomIn" style="animation-delay: 1.2s;">
+                            <h4>3</h4>
+                            <p>Overdue Tasks</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="dashboard-item fadeInUp" style="animation-delay: 0.6s;">
+                    <h3>Recent Activity</h3>
+                    <ul id="activity-list" class="activity-list">
+                        <script>
+                            function updateRecentActivity() {
+                            const activityList = document.getElementById('activity-list');
+                            
+                            // Simulating real-time data (replace with actual API call)
+                            const activities = [
+                                { icon: 'fas fa-check-circle', text: 'Completed "Project Proposal"', time: '2 minutes ago' },
+                                { icon: 'fas fa-exclamation-triangle', text: 'Task "Client Meeting" is due soon', time: '10 minutes ago' },
+                                { icon: 'fas fa-plus-circle', text: 'Added new task "Research AI trends"', time: '1 hour ago' },
+                                { icon: 'fas fa-trash-alt', text: 'Deleted task "Old assignment"', time: '3 hours ago' }
+                            ];
+                            
+                            activityList.innerHTML = ''; // Clear existing items
+                            
+                            activities.forEach((activity, index) => {
+                                const li = document.createElement('li');
+                                li.className = 'animate__animated animate__fadeInRight';
+                                li.style.animationDelay = `${0.2 * (index + 1)}s`;
+                                li.innerHTML = `<i class="${activity.icon}"></i> ${activity.text} - ${activity.time}`;
+                                activityList.appendChild(li);
+                            });
+                        }
+                        
+                        // Update activity every 30 seconds
+                        updateRecentActivity();
+                        setInterval(updateRecentActivity, 30000);
+                        </script>
+                    </ul>
+                </div>
+                <div class="dashboard-item fadeInUp" style="animation-delay: 0.8s;">
+                    <h3>Quick Actions</h3>
+                    <a href="task.html" class="btn animate__animated animate__pulse animate__infinite"><i class="fas fa-plus"></i> Add New Task</a>
+                    <button class="btn animate__animated animate__pulse animate__infinite" style="animation-delay: 0.5s;"><i class="fas fa-list-ul"></i> View All Tasks</button>
+                    <button class="btn animate__animated animate__pulse animate__infinite" style="animation-delay: 1s;"><i class="fas fa-file-alt"></i> Generate Report</button>
+                </div>
+
+            </section>
+        </main>
+    </div>
+    <script>
+        // Projects Chart
+ var projectsCtx = document.getElementById('projectsChart').getContext('2d');
+ var projectsChart = new Chart(projectsCtx, {
+     type: 'doughnut',
+     data: {
+         labels: ['Machine Learning', 'Computer Vision', 'NLP', 'Robotics', 'Predictive Analytics'],
+         datasets: [{
+             data: [30, 25, 20, 15, 10],
+             backgroundColor: [
+                 'rgba(255, 99, 132, 0.8)',
+                 'rgba(54, 162, 235, 0.8)',
+                 'rgba(255, 206, 86, 0.8)',
+                 'rgba(75, 192, 192, 0.8)',
+                 'rgba(153, 102, 255, 0.8)'
+             ]
+         }]
+     },
+     options: {
+         responsive: true,
+         plugins: {
+             legend: {
+                 position: 'bottom',
+             },
+             title: {
+                 display: true,
+                 text: 'AI Project Distribution'
+             }
+         }
+     }
+ });
+
+ // Performance Chart
+ var performanceCtx = document.getElementById('performanceChart').getContext('2d');
+ var performanceChart = new Chart(performanceCtx, {
+     type: 'line',
+     data: {
+         labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+         datasets: [{
+             label: 'Model Accuracy',
+             data: [88, 90, 91, 92, 94, 95],
+             borderColor: 'rgba(75, 192, 192, 1)',
+             tension: 0.1
+         }, {
+             label: 'Training Time',
+             data: [120, 115, 110, 105, 100, 95],
+             borderColor: 'rgba(255, 99, 132, 1)',
+             tension: 0.1
+         }]
+     },
+     options: {
+         responsive: true,
+         plugins: {
+             legend: {
+                 position: 'top',
+             },
+             title: {
+                 display: true,
+                 text: 'AI Model Performance Trends'
+             }
+         },
+         scales: {
+             y: {
+                 beginAtZero: false,
+                 min: 80,
+                 max: 100
+             }
+         }
+     }
+ });
+
+ // Add this new script for fetching the Goal.Keeper progress board
+document.addEventListener('DOMContentLoaded', function() {
+    fetch('login/goal.html')
+        .then(response => response.text())
+        .then(html => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            // Replace '.progress-board' with the actual selector for your progress board
+            const progressBoard = doc.querySelector('.progress-board');
+            if (progressBoard) {
+                document.getElementById('goalKeeperProgress').appendChild(progressBoard);
+            }
+        })
+        .catch(error => console.error('Error fetching Goal.Keeper progress:', error));
+});
+function updateRecentActivity() {
+                            const activityList = document.getElementById('activity-list');
+                            
+                            // Simulating real-time data (replace with actual API call)
+                            const activities = [
+                                { icon: 'fas fa-check-circle', text: 'Completed "Project Proposal"', time: '2 minutes ago' },
+                                { icon: 'fas fa-exclamation-triangle', text: 'Task "Client Meeting" is due soon', time: '10 minutes ago' },
+                                { icon: 'fas fa-plus-circle', text: 'Added new task "Research AI trends"', time: '1 hour ago' },
+                                { icon: 'fas fa-trash-alt', text: 'Deleted task "Old assignment"', time: '3 hours ago' }
+                            ];
+                            
+                            activityList.innerHTML = ''; // Clear existing items
+                            
+                            activities.forEach((activity, index) => {
+                                const li = document.createElement('li');
+                                li.className = 'animate__animated animate__fadeInRight';
+                                li.style.animationDelay = `${0.2 * (index + 1)}s`;
+                                li.innerHTML = `<i class="${activity.icon}"></i> ${activity.text} - ${activity.time}`;
+                                activityList.appendChild(li);
+                            });
+                        }
+                        
+                        // Update activity every 30 seconds
+                        updateRecentActivity();
+                        setInterval(updateRecentActivity, 30000);
+
+        function toggleTheme() {
+            document.body.classList.toggle('dark-theme');
+            const themeIcon = document.querySelector('.theme-toggle i');
+            if (document.body.classList.contains('dark-theme')) {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            } else {
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+            }
+        }
+    </script>
+</body>
+</html>
