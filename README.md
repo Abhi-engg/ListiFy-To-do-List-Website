@@ -1,5 +1,4 @@
 # ListiFy-To-do-List-Website
-ListiFy
 ListiFy is a versatile task management and goal-tracking platform designed to help users stay organized and efficient. It offers various tools to manage daily tasks, track goals, create timetables, and more—all in one place.
 
 Features
