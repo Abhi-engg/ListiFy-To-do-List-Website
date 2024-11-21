@@ -5,7 +5,8 @@
 ## 🚀 Live Demo
 
 Check out the live version of ListiFy here:  
-[**ListiFy**](https://your-vercel-deployment-link.vercel.app)
+[**ListiFy**](https://listi-fy-to-do-list-website-o7aa3xlkp-abhi-enggs-projects.vercel.app
+)
 
 ---
 
