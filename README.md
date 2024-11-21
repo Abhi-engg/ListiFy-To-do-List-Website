@@ -46,7 +46,7 @@ Check out the live version of ListiFy here:
 ## 💻 Technology Stack
 
 - **Frontend**: HTML, CSS, JavaScript
-- **Backend**: Node.js (if applicable)
+- **Backend**: Node.js (if applicable) <strong>Working on it</strong>
 - **Hosting**: Vercel
 
 ---
@@ -55,7 +55,7 @@ Check out the live version of ListiFy here:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/ListiFy.git 
+   git clone https://github.com/Abhi-engg/ListiFy-To-do-List-Website.git 
 
  # 🌟 Future Enhancements
 Dark Mode: Add theme customization.
