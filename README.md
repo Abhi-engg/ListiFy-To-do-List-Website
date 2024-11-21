@@ -2,14 +2,6 @@
 
 **ListiFy** is a feature-packed task management website designed to make organizing your life a breeze. From tracking goals to customizing timetables, it combines flexibility and a user-friendly interface to suit all your productivity needs.
 
-## 🚀 Live Demo
-
-Check out the live version of ListiFy here:  
-[**ListiFy**](https://listi-fy-to-do-list-website-o7aa3xlkp-abhi-enggs-projects.vercel.app
-)
-
----
-
 ## 🚀 Features
 
 1. **📝 Taskmaster**  
@@ -63,13 +55,18 @@ Dark Mode: Add theme customization.
 Collaborative Features: Enable task sharing among users.
 Notifications: Integrate reminders for tasks and goals.  
 
-# 📸 Screenshots
--------
+
+## 🚀 Live Demo
+
+Check out the live version of ListiFy here:  
+[**ListiFy**](https://listi-fy-to-do-list-website-o7aa3xlkp-abhi-enggs-projects.vercel.app
+)
 
 # 📧 Contact
 For queries or feedback, feel free to reach out:
 
 Email: abhijeetyadav33xb@gmail.com
+
 GitHub: @Abhi-engg
 
 
