@@ -1,0 +1,315 @@
+:root {
+    --bg-color: #ffffff;
+    --text-color: #333;
+    --primary-color: #1e90ff;
+    --secondary-color: #87cefa;
+    --accent-color: #4169e1;
+    --card-bg: #f0f8ff;
+    --modal-bg: #ffffff;
+  }
+
+  .dark-theme {
+    --bg-color: #1a1a1a;
+    --text-color: #f0f0f0;
+    --primary-color: #4a90e2;
+    --secondary-color: #2c3e50;
+    --accent-color: #3498db;
+    --card-bg: #2c2c2c;
+    --modal-bg: #333333;
+  }
+
+  body {
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(135deg, var(--card-bg) 0%, var(--bg-color) 100%);
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+  
+  .container {
+    max-width: 800px;
+    width: 90%;
+    background: var(--bg-color);
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  }
+  
+  h1, h2 {
+    color: var(--primary-color);
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  
+  form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+  }
+  
+  label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+    color: var(--primary-color);
+  }
+  
+  input[type="text"], input[type="time"], select {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid var(--secondary-color);
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+    background-color: var(--card-bg);
+    color: var(--text-color);
+  }
+  
+  input[type="text"]:focus, input[type="time"]:focus, select:focus {
+    border-color: var(--primary-color);
+    outline: none;
+  }
+  
+  button {
+    background: var(--primary-color);
+    color: var(--bg-color);
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background 0.3s ease;
+  }
+  
+  button:hover {
+    background: var(--accent-color);
+  }
+  
+  #timetableList {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .class-item {
+    background: var(--card-bg);
+    border-left: 5px solid var(--primary-color);
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: transform 0.3s ease;
+  }
+  
+  .class-item:hover {
+    transform: translateX(10px);
+  }
+  
+  .class-info {
+    display: flex;
+    align-items: center;
+  }
+  
+  .class-icon {
+    margin-right: 15px;
+    font-size: 24px;
+    color: var(--primary-color);
+  }
+  
+  .class-time {
+    font-weight: bold;
+    color: var(--primary-color);
+  }
+  
+  .delete-btn {
+    background: none;
+    border: none;
+    color: #ff4500;
+    cursor: pointer;
+    font-size: 18px;
+    transition: color 0.3s ease;
+  }
+  
+  .delete-btn:hover {
+    color: #ff6347;
+  }
+  
+  #aiSuggestions {
+    background: var(--card-bg);
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 30px;
+  }
+  
+  #aiSuggestions h3 {
+    color: var(--primary-color);
+    margin-top: 0;
+  }
+  
+  #suggestionsList {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  #suggestionsList li {
+    margin-bottom: 10px;
+    padding: 10px;
+    background: var(--bg-color);
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+  
+  .timetable-box {
+    background: var(--card-bg);
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 30px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .timetable-grid {
+    display: grid;
+    grid-template-columns: auto repeat(7, 1fr);
+    gap: 1px;
+    background-color: var(--secondary-color);
+    padding: 1px;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .timetable-cell {
+    background-color: var(--bg-color);
+    padding: 10px;
+    text-align: center;
+    font-size: 14px;
+    cursor: pointer;
+  }
+
+  .timetable-header {
+    font-weight: bold;
+    background-color: var(--primary-color);
+    color: var(--bg-color);
+  }
+
+  .timetable-time {
+    font-weight: bold;
+    background-color: var(--accent-color);
+    color: var(--bg-color);
+  }
+
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+  }
+
+  .modal-content {
+    background-color: var(--modal-bg);
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid var(--secondary-color);
+    width: 80%;
+    max-width: 500px;
+    border-radius: 8px;
+  }
+
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+
+  .close:hover,
+  .close:focus {
+    color: var(--primary-color);
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  #editForm {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  #editForm div {
+    display: flex;
+    flex-direction: column;
+  }
+
+  #editForm label {
+    margin-bottom: 5px;
+  }
+
+  #editForm input {
+    padding: 10px;
+    border: 1px solid var(--secondary-color);
+    border-radius: 4px;
+    background-color: var(--card-bg);
+    color: var(--text-color);
+  }
+
+  #editForm input:focus {
+    border-color: var(--primary-color);
+    outline: none;
+  }
+
+  #editForm button {
+    margin-top: 10px;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  #editForm button[onclick="saveEdit()"] {
+    background-color: #32cd32;
+    color: var(--bg-color);
+  }
+
+  #editForm button[onclick="saveEdit()"]:hover {
+    background-color: #228b22;
+  }
+
+  #editForm button[onclick="deleteClass()"] {
+    background-color: #ff4500;
+    color: var(--bg-color);
+  }
+
+  #editForm button[onclick="deleteClass()"]:hover {
+    background-color: #ff6347;
+  }
+
+  .theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--primary-color);
+    color: var(--bg-color);
+    border: none;
+    padding: 10px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s ease;
+  }
+
+  .theme-toggle:hover {
+    background: var(--accent-color);
+  }
