@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ListiFy - Your Smart To-Do List</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2980b9;
+            --text-color: #333;
+            --bg-color: #ffffff;
+        }
+
+        .dark-theme {
+            --primary-color: #2980b9;
+            --secondary-color: #3498db;
+            --text-color: #e0e0e0;
+            --bg-color: #121212;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: background-color 0.3s ease;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 2rem;
+            color: #fff;
+            font-weight: 700;
+        }
+
+        .logo i {
+            margin-right: 10px;
+            font-size: 2.5rem;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            align-items: center;
+        }
+
+        nav ul li {
+            margin-left: 30px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #fff;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: #ecf0f1;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .hero {
+            background: url('https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center/cover;
+            color: #fff;
+            text-align: center;
+            padding: 150px 0 100px;
+            margin-top: 80px;
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(52, 152, 219, 0.7);
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: #fff;
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .features {
+            padding: 100px 0;
+        }
+
+        .features h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 50px;
+            color: var(--primary-color);
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .feature {
+            background-color: var(--bg-color);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .feature:hover {
+            transform: translateY(-10px);
+        }
+
+        .feature i {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        .feature h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+
+        .cta {
+            background-color: var(--primary-color);
+            color: #fff;
+            text-align: center;
+            padding: 80px 0;
+            transition: background-color 0.3s ease;
+        }
+
+        .cta h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .cta p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+        }
+
+        footer {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            text-align: center;
+            padding: 20px 0;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <div class="logo">
+                <i class="fas fa-check-circle"></i>
+                <span>ListiFy</span>
+            </div>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li><button class="theme-toggle" onclick="toggleTheme()"><i class="fas fa-moon"></i></button></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="home" class="hero">
+            <h1>Organize Your Life with ListiFy</h1>
+            <p>The smart to-do list app that helps you stay productive and focused</p>
+            <a href="login.html" class="btn">Get Started</a>
+        </section>
+
+        <section id="features" class="features">
+            <div class="container">
+                <h2>Why Choose ListiFy?</h2>
+                <div class="feature-grid">
+                    <div class="feature">
+                        <i class="fas fa-check-circle"></i>
+                        <h3>Smart Task Management</h3>
+                        <p>Efficiently organize and prioritize your tasks</p>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-bell"></i>
+                        <h3>Reminders & Notifications</h3>
+                        <p>Never miss a deadline with timely alerts</p>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-sync-alt"></i>
+                        <h3>Cross-Platform Sync</h3>
+                        <p>Access your lists from any device, anywhere</p>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-chart-pie"></i>
+                        <h3>Productivity Analytics</h3>
+                        <p>Track your progress and improve efficiency</p>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-sticky-note"></i>
+                        <h3>Sticky Notes</h3>
+                        <p>Create and organize digital sticky notes for quick reminders</p>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-calendar-alt"></i>
+                        <h3>Interactive Timetable</h3>
+                        <p>Visualize your schedule with an easy-to-use timetable feature</p>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-robot"></i>
+                        <h3>AI-Powered Assistant</h3>
+                        <p>Get smart suggestions and task optimization with our built-in BOT</p>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-calendar-check"></i>
+                        <h3>Integrated Calendar</h3>
+                        <p>Seamlessly manage your tasks and events in one unified calendar view</p>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-futbol"></i>
+                        <h3>Goal Keeper</h3>
+                        <p>Set, track, and achieve your personal and professional goals</p>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-table"></i>
+                        <h3>Advanced Timetable</h3>
+                        <p>Create and manage complex schedules with our AI-powered timetable generator</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="cta">
+            <div class="container">
+                <h2>Ready to Boost Your Productivity?</h2>
+                <p>Join thousands of users who have transformed their daily routines with ListiFy</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 ListiFy. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        function toggleTheme() {
+            document.body.classList.toggle('dark-theme');
+            const themeIcon = document.querySelector('.theme-toggle i');
+            if (document.body.classList.contains('dark-theme')) {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            } else {
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+            }
+        }
+    </script>
+</body>
+</html>

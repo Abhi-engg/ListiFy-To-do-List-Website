@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ListiFy - Login</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #1e90ff;
+            --secondary-color: #4169e1;
+            --text-color: #e0e0e0;
+            --bg-color: #121212;
+            --error-color: #ff6b6b;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background: linear-gradient(135deg, #1a1a1a 0%, #2c2c2c 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        .login-container {
+            background-color: rgba(30, 30, 30, 0.9);
+            padding: 3rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 400px;
+            transform: translateY(-20px);
+            opacity: 0;
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .login-container h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            font-size: 1rem;
+            border: 2px solid #444;
+            border-radius: 8px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            background-color: #2a2a2a;
+            color: var(--text-color);
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(30, 144, 255, 0.1);
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--primary-color);
+            color: #fff;
+            padding: 1rem 1.5rem;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .btn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(30, 144, 255, 0.2);
+        }
+        
+        .links {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+        
+        .links a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+        
+        .links a:hover {
+            color: var(--secondary-color);
+        }
+        
+        .error {
+            color: var(--error-color);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+        
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2><i class="as fa-check-circle"></i> ListiFy</h2>
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit" class="btn">Log In</button>
+        </form>
+        <div class="links">
+            <a href="#forgot-password">Forgot Password?</a> | <a href="signup.html">Sign Up</a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Here you would typically send the login data to your server
+            console.log('Login attempt', {
+                email: document.getElementById('email').value,
+                password: document.getElementById('password').value
+            });
+            // Redirect to user.html
+            window.location.href = 'user.html';
+        });
+
+        // Add input validation and error handling
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+
+        emailInput.addEventListener('blur', validateEmail);
+        passwordInput.addEventListener('blur', validatePassword);
+
+        function validateEmail() {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(emailInput.value)) {
+                showError(emailInput, 'Please enter a valid email address');
+            } else {
+                removeError(emailInput);
+            }
+        }
+
+        function validatePassword() {
+            if (passwordInput.value.length < 6) {
+                showError(passwordInput, 'Password must be at least 6 characters long');
+            } else {
+                removeError(passwordInput);
+            }
+        }
+
+        function showError(input, message) {
+            const formGroup = input.parentElement;
+            let error = formGroup.querySelector('.error');
+            if (!error) {
+                error = document.createElement('div');
+                error.className = 'error';
+                formGroup.appendChild(error);
+            }
+            error.textContent = message;
+            input.style.borderColor = 'var(--error-color)';
+        }
+
+        function removeError(input) {
+            const formGroup = input.parentElement;
+            const error = formGroup.querySelector('.error');
+            if (error) {
+                formGroup.removeChild(error);
+            }
+            input.style.borderColor = '#444';
+        }
+    </script>
+</body>
+</html>
