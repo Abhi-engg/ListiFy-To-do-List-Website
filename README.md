@@ -39,7 +39,7 @@
 ## 💻 Technology Stack
 
 - **Frontend**: HTML, CSS, JavaScript
-- **Backend**: Node.js (if applicable) <strong>Working on it</strong>
+- **Backend**: Trying to add Django for Backend
 - **Hosting**: Vercel
 
 ---
