@@ -21,6 +21,6 @@ from django.urls import include, path
 
 
 urlpatterns = [
-    path('', include('listify.urls')),
+    path('', include('listify.urls', namespace='listify')),
     path("admin/", admin.site.urls),
 ]
